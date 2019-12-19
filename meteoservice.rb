@@ -7,6 +7,9 @@ require 'net/http'
 require 'uri'
 #Represents a full XML document, including PIs, a doctype, etc. 
 require 'rexml/document'
+# Create HashArray where keys are posible varaety of attribute's 'cloudiness' value in xml
+#Assign HashArray to constant.
+CLOUDINESS = {-1 => "Fog", 0 => "Sunny", 1 => "Partly Cloudy", 2 => "Mostly Cloudy", 3  => "Showers"}
 
 # => #<URI::HTTP https://xml.meteoservice.ru/export/gismeteo/point/1891.xml>
 # Url with xml of Sevastopol weather
@@ -20,7 +23,7 @@ doc = REXML::Document.new(response.body)
 
 #Take value of city name from atribute 'sname' of element 'TOWN' of element 'REPORT' of xml
 #Decoding it from HEX to UTF-8 & save to 'city_name'
-city_name = doc.root.elements['REPORT/TOWN'].attributes['sname']
+city_name = URI.unescape(doc.root.elements['REPORT/TOWN'].attributes['sname'])
 
 #Take all child elements from element 'TOWN', which child of element 'REPORT' of xml document
 #Put them to array and take current forecast with '.elements.to_a[0]'  
@@ -38,4 +41,19 @@ max_wind = current_forecast.elements['WIND'].attributes['max']
 #Then convert value to integer
 clouds_index = current_forecast.elements['PHENOMENA'].attributes['cloudiness'].to_i
 
-puts max_wind
+#Assign value from HashArray 'CLOUDINESS' of key from clod_index to var clouds 
+clouds = CLOUDINESS[clouds_index]
+
+#Output name of city
+puts city_name
+
+#Output min & max temperrature celcium  
+puts "Temperture: from #{min_temp}C to #{max_temp}C"
+
+#Output speed of wind in m/s
+puts "Wind: to #{max_wind} m/s"
+
+#Output cloudiness
+puts clouds
+
+
