@@ -5,8 +5,9 @@
 require 'net/http'
 #URI is a module providing classes to handle Uniform Resource Identifiers.
 require 'uri'
-#Represents a full XML document, including PIs, a doctype, etc. 
+#Represents a full XML document, including PIs (processing instructions), a doctype, etc. 
 require 'rexml/document'
+
 # Create HashArray where keys are posible varaety of attribute's 'cloudiness' value in xml
 #Assign HashArray to constant.
 CLOUDINESS = {-1 => "Fog", 0 => "Sunny", 1 => "Partly Cloudy", 2 => "Mostly Cloudy", 3  => "Showers"}
